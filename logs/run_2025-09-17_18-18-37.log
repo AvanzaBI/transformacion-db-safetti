@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/azureuser/transformacion_db/run_jobs_load.py", line 4, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'

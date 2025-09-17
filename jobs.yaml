@@ -1,0 +1,105 @@
+base_prefix: "busint/safetti/input"   # prefijo común bajo el container 'raw'
+
+jobs:
+  - name: "inventario_bodega"
+    path: "Compañia 1/10 Costos/01. Inventario por bodega"
+    table: "safetti.inventario_bodega"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: ['CodbarraExt', 'CodbarraInt', 'CodbarraMues', 'TipoConf','Ubic1','Ubic2','Ubic3','Ubic4','Ubic5','Instrucciones']   # <- se eliminarán si existen
+    ddl_file: "ddl/inventario_bodega.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_inv_bodega_fecha, columns: ["fecha_operacion"] }
+
+  - name: "historico_lotes_gerencia"
+    path: "Compañia 1/10 Costos/02. Historico lotes gerencia"
+    table: "safetti.historico_lotes_gerencia"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    ddl_file: "ddl/historico_lotes_gerencia.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_hist_lotes_gerencia, columns: ["fecha_operacion"] }
+
+
+  - name: "insumos_bodegas_sin_integrar"
+    path: "Compañia 1/10 Costos/03. Insumos bodegas sin integrar"
+    table: "safetti.insumos_bodegas_sin_integrar"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    ddl_file: "ddl/insumos_bodegas_sin_integrar.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_ins_bodega_sin_integrar, columns: ["fecha_operacion"] }
+
+  - name: "telas_en_bodega"
+    path: "Compañia 1/10 Costos/04. Telas en bodega" 
+    table: "safetti.telas_en_bodega"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: ["Activo", "Rend","K"]
+    ddl_file: "ddl/telas_en_bodega.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_telas_bodega, columns: ["fecha_operacion"] }
+
+  - name: "cartera nacional"
+    path: "Compañia 1/3. Cuentas por Cobrar/01. Cartera Nacional"
+    table: "safetti.cartera_nacional"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: ["Direccion", "Telefono", "Celular"]
+    ddl_file: "ddl/cartera_nacional.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_cartera_nacional, columns: ["fecha_operacion"] }
+
+  - name: "notas contables gerencia"
+    path: "Compañia 1/3. Cuentas por Cobrar/03. Notas contables gerencia"
+    table: "safetti.notas_contables_gerencia"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: ["CHEQUE"]
+    ddl_file: "ddl/notas_contables_gerencia.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_ntas_contables_gerencia, columns: ["fecha_operacion"] }
+
+  - name: "ventas por conceptos-Gerencia"
+    path: "Compañia 1/5. Ventas/04. Ventas por conceptos-Gerencia"
+    table: "safetti.ventas_por_conceptos_gerencia"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: ["CTPUC","Otros"]
+    ddl_file: "ddl/ventas_por_conceptos_gerencia.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_venta_conceptos_gerencia, columns: ["fecha_operacion"] }
+
+  - name: "Facturado Real Todos"
+    path: "Compañia 1/5. Ventas/02. Facturado Real Todos"
+    table: "safetti.facturado_real_todos"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: [CbarraInt,"CbarraExt","CbarraMuestras","Empaque"]
+    ddl_file: "ddl/facturado_real_todos.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_fact_real_todos, columns: ["fecha_operacion"] }

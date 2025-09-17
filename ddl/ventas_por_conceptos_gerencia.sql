@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS ventas_por_conceptos_gerencia (
+    Nfact INT,
+    Codigo INT,
+    Cliente VARCHAR(100),
+    Fechaini DATE,
+    FechaFin DATE,
+    `Total Und` INT,
+    Numped INT,
+    Total DECIMAL(10,2),
+    BGravable DECIMAL(10,2),
+    Iva DECIMAL(10,2),
+    Rtfte DECIMAL(10,2),
+    Rtfteiva DECIMAL(10,2),
+    NitoCC VARCHAR(20),
+    CTPUC VARCHAR(20),
+    Rtfteica DECIMAL(10,2),
+    `Tipo de Documento` VARCHAR(50),
+    `RtfteCree` DECIMAL(10,2),
+    Otros VARCHAR(100),
+    CtaTotalPagar DECIMAL(10,2),
+    fecha_operacion DATE
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

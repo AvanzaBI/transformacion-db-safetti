@@ -1,0 +1,80 @@
+/home/azureuser/transformacion_db/run_jobs_load.py:103: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df_batch = pd.concat(buffer, ignore_index=True, sort=False)
+
+==> Job: inventario_bodega
+    Path:  raw/busint/safetti/input/Compañia 1/10 Costos/01. Inventario por bodega
+    Tabla: safetti.inventario_bodega
+    DDL:   ddl/inventario_bodega.sql | Replace: truncate
+    Lote:  100000 | Exts: ['xlsx']
+    Drop:  ['CodbarraExt', 'CodbarraInt', 'CodbarraMues', 'TipoConf', 'Ubic1', 'Ubic2', 'Ubic3', 'Ubic4', 'Ubic5', 'Instrucciones']
+    ✔ Lote cargado: 101015 filas (archivos acumulados: 58)
+    ✔ Lote cargado: 101989 filas (archivos acumulados: 99)
+    ✔ Lote final: 2508 filas
+    Resumen: encontrados=100  procesados=100  errores=0  insertadas=205512
+
+==> Job: historico_lotes_gerencia
+    Path:  raw/busint/safetti/input/Compañia 1/10 Costos/02. Historico lotes gerencia
+    Tabla: safetti.historico_lotes_gerencia
+    DDL:   ddl/historico_lotes_gerencia.sql | Replace: truncate
+    Lote:  100000 | Exts: ['xlsx']
+    Drop:  (ninguna)
+    ✔ Lote cargado: 101610 filas (archivos acumulados: 24)
+    ✔ Lote cargado: 101276 filas (archivos acumulados: 55)
+    ✔ Lote final: 12094 filas
+    Resumen: encontrados=67  procesados=67  errores=0  insertadas=214980
+
+==> Job: insumos_bodegas_sin_integrar
+    Path:  raw/busint/safetti/input/Compañia 1/10 Costos/03. Insumos bodegas sin integrar
+    Tabla: safetti.insumos_bodegas_sin_integrar
+    DDL:   ddl/insumos_bodegas_sin_integrar.sql | Replace: truncate
+    Lote:  100000 | Exts: ['xlsx']
+    Drop:  (ninguna)
+    ✔ Lote final: 12971 filas
+    Resumen: encontrados=40  procesados=40  errores=0  insertadas=12971
+
+==> Job: telas_en_bodega
+    Path:  raw/busint/safetti/input/Compañia 1/10 Costos/04. Telas en bodega
+    Tabla: safetti.telas_en_bodega
+    DDL:   ddl/telas_en_bodega.sql | Replace: truncate
+    Lote:  100000 | Exts: ['xlsx']
+    Drop:  ['Activo', 'Rend', 'K']
+    ✔ Lote final: 7279 filas
+    Resumen: encontrados=41  procesados=41  errores=0  insertadas=7279
+
+==> Job: cartera nacional
+    Path:  raw/busint/safetti/input/Compañia 1/3. Cuentas por Cobrar/01. Cartera Nacional
+    Tabla: safetti.cartera_nacional
+    DDL:   ddl/cartera_nacional.sql | Replace: truncate
+    Lote:  100000 | Exts: ['xlsx']
+    Drop:  ['Direccion', 'Telefono', 'Celular']
+    ✔ Lote final: 46687 filas
+    Resumen: encontrados=196  procesados=196  errores=0  insertadas=46687
+
+==> Job: notas contables gerencia
+    Path:  raw/busint/safetti/input/Compañia 1/3. Cuentas por Cobrar/03. Notas contables gerencia
+    Tabla: safetti.notas_contables_gerencia
+    DDL:   ddl/notas_contables_gerencia.sql | Replace: truncate
+    Lote:  100000 | Exts: ['xlsx']
+    Drop:  ['CHEQUE']
+    ✔ Lote final: 3242 filas
+    Resumen: encontrados=16  procesados=16  errores=0  insertadas=3242
+
+==> Job: ventas por conceptos-Gerencia
+    Path:  raw/busint/safetti/input/Compañia 1/5. Ventas/04. Ventas por conceptos-Gerencia
+    Tabla: safetti.ventas_por_conceptos_gerencia
+    DDL:   ddl/ventas_por_conceptos_gerencia.sql | Replace: truncate
+    Lote:  100000 | Exts: ['xlsx']
+    Drop:  ['CTPUC', 'Otros']
+    ✔ Lote final: 6813 filas
+    Resumen: encontrados=92  procesados=92  errores=0  insertadas=6813
+
+==> Job: Facturado Real Todos
+    Path:  raw/busint/safetti/input/Compañia 1/5. Ventas/02. Facturado Real Todos
+    Tabla: safetti.facturado_real_todos
+    DDL:   ddl/facturado_real_todos.sql | Replace: truncate
+    Lote:  100000 | Exts: ['xlsx']
+    Drop:  ['CbarraInt', 'CbarraExt', 'CbarraExt', 'CbarraMuestras', 'Empaque']
+    ✔ Lote cargado: 100947 filas (archivos acumulados: 34)
+    ✔ Lote cargado: 101858 filas (archivos acumulados: 59)
+    ✔ Lote final: 10290 filas
+    Resumen: encontrados=64  procesados=64  errores=0  insertadas=213095
