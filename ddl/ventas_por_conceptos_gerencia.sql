@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS ventas_por_conceptos_gerencia (
     FechaFin DATE,
     `Total Und` INT,
     Numped INT,
+<<<<<<< HEAD
     Total DECIMAL(10,2),
     BGravable DECIMAL(10,2),
     Iva DECIMAL(10,2),
@@ -18,5 +19,19 @@ CREATE TABLE IF NOT EXISTS ventas_por_conceptos_gerencia (
     `RtfteCree` DECIMAL(10,2),
     Otros VARCHAR(100),
     CtaTotalPagar DECIMAL(10,2),
+=======
+    Total DECIMAL(20,2),
+    BGravable DECIMAL(20,2),
+    Iva DECIMAL(20,2),
+    Rtfte DECIMAL(20,2),
+    Rtfteiva DECIMAL(20,2),
+    NitoCC VARCHAR(20),
+    CTPUC VARCHAR(20),
+    Rtfteica DECIMAL(20,2),
+    `Tipo de Documento` VARCHAR(50),
+    `RtfteCree` DECIMAL(20,2),
+    Otros VARCHAR(100),
+    CtaTotalPagar DECIMAL(20,2),
+>>>>>>> f116724 (init: estructura Safetti ETL)
     fecha_operacion DATE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

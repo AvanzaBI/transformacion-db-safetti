@@ -9,7 +9,11 @@ jobs:
     allowed_exts: ["xlsx"]
     replace_mode: "truncate"
     batch_rows: 100000
+<<<<<<< HEAD
     drop_columns: ['CodbarraExt', 'CodbarraInt', 'CodbarraMues', 'TipoConf','Ubic1','Ubic2','Ubic3','Ubic4','Ubic5','Instrucciones']   # <- se eliminarán si existen
+=======
+    drop_columns: ['CodbarraExt', 'CodbarraInt', 'CodbarraMues','Ubic1','Ubic2','Ubic3','Ubic4','Ubic5','Instrucciones']   # <- se eliminarán si existen
+>>>>>>> f116724 (init: estructura Safetti ETL)
     ddl_file: "ddl/inventario_bodega.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
     indexes:
       - { name: ix_inv_bodega_fecha, columns: ["fecha_operacion"] }
@@ -64,6 +68,10 @@ jobs:
     ddl_file: "ddl/cartera_nacional.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
     indexes:
       - { name: ix_cartera_nacional, columns: ["fecha_operacion"] }
+<<<<<<< HEAD
+=======
+    extract_fecha_operacion: False
+>>>>>>> f116724 (init: estructura Safetti ETL)
 
   - name: "notas contables gerencia"
     path: "Compañia 1/3. Cuentas por Cobrar/03. Notas contables gerencia"
@@ -78,6 +86,50 @@ jobs:
     indexes:
       - { name: ix_ntas_contables_gerencia, columns: ["fecha_operacion"] }
 
+<<<<<<< HEAD
+=======
+  - name: "Inventario disponible bodega producto terminado"
+    path: "Compañia 1/10 Costos/09. Inventario Disponible bodega-producto terminado"
+    table: "safetti.inventario_disponible_bodega_terminado"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: ["CodbarraExt","CodbarraInt","CodbarraMues"]
+    ddl_file: "ddl/inventario_disponible_bodega_terminado.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_inventario_disponible_bodega_terminado, columns: ["fecha_operacion"] }
+
+  - name: "Inventario pos"
+    path: "Compañia 1/10 Costos/10. Inventario pos"
+    table: "safetti.inventario_pos"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: ["CbarraExterno","CbarraInterno","CbarraMuestras"]
+    ddl_file: "ddl/inventario_pos.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_inventario_pos, columns: ["fecha_operacion"] }
+
+  - name: "Ventas POS 3"
+    path: "Compañia 1/5. Ventas/06. POS 3"
+    table: "safetti.ventas_pos3"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: ["CodbarraExt","CodbarraInt","CodbarraMues","email","telefono","celular","Obs en Fact"]
+    ddl_file: "ddl/ventas_pos3.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_ventas_pos3, columns: ["Nfact"] }
+    extract_fecha_operacion: False
+
+
+>>>>>>> f116724 (init: estructura Safetti ETL)
   - name: "ventas por conceptos-Gerencia"
     path: "Compañia 1/5. Ventas/04. Ventas por conceptos-Gerencia"
     table: "safetti.ventas_por_conceptos_gerencia"
@@ -92,14 +144,122 @@ jobs:
       - { name: ix_venta_conceptos_gerencia, columns: ["fecha_operacion"] }
 
   - name: "Facturado Real Todos"
+<<<<<<< HEAD
     path: "Compañia 1/5. Ventas/02. Facturado Real Todos"
+=======
+    path: "Compañia 1/5. Ventas/05. Facturado real"
+>>>>>>> f116724 (init: estructura Safetti ETL)
     table: "safetti.facturado_real_todos"
     sheet_name: 0
     skiprows: 0
     allowed_exts: ["xlsx"]
     replace_mode: "truncate"
     batch_rows: 100000
+<<<<<<< HEAD
     drop_columns: [CbarraInt,"CbarraExt","CbarraMuestras","Empaque"]
     ddl_file: "ddl/facturado_real_todos.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
     indexes:
       - { name: ix_fact_real_todos, columns: ["fecha_operacion"] }
+=======
+    drop_columns: [CbarraInt,"CbarraExt","CbarraMuestras"]
+    ddl_file: "ddl/facturado_real_todos.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_fact_real_todos, columns: ["fecha_operacion"] }
+
+  - name: "BD saffeti antigua"
+    path: "Compañia 1/9. bd antigua/BD antigua"
+    table: "safetti.bd_antigua"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: [fecha_operacion]
+    ddl_file: "ddl/bd_antigua.sql"
+    indexes:
+      - { name: ix_bd_antigua, columns: ["SKU"] }
+      - { name: ix_nit_o_cc, columns: ["NitoCC"] }
+    extract_fecha_operacion: false   
+
+  - name: "tabla auxiliar categoria 2"
+    path: "Compañia 1/9. bd antigua/tabla auxiliar categoria 2"
+    table: "safetti.tabla_auxiliar_categoria_2"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: [fecha_operacion]
+    ddl_file: "ddl/tabla_auxiliar_categoria_2.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_bd_antigua, columns: ["Catego Pdto"] } 
+  
+  - name: "tabla auxiliar nom col"
+    path: "Compañia 1/9. bd antigua/tabla auxiliar nom col"
+    table: "safetti.tabla_auxiliar_nom_col"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: ["fecha_operacion"]
+    ddl_file: "ddl/tabla_auxiliar_nom_col.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_tabla_auxiliar_nom_col, columns: ["SKU"] }
+    extract_fecha_operacion: false      
+
+  - name: "Cuentas por pagar Nacionales"
+    path: "Compañia 1/4. Cuentas por Pagar/01. Cuentas por Pagar Nacional"
+    table: "safetti.cxp_nacionales"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: ["Direccion","Telefono"]
+    ddl_file: "ddl/cxp_nacionales.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_bcxp_nacionales, columns: ["CODIGO"] }  
+
+
+  - name: "Cuentas por pagar Internacionales"
+    path: "Compañia 1/4. Cuentas por Pagar/02. Cuentas por pagar internacionales"
+    table: "safetti.cxp_internacional"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: []
+    ddl_file: "ddl/cxp_internacional.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_bcxp_internacional, columns: ["Nombre"] } 
+
+  - name: "Cartera exportacion"
+    path: "Compañia 1/3. Cuentas por Cobrar/02. Cartera Exportacion"
+    table: "safetti.cartera_exportacion"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: []
+    ddl_file: "ddl/cartera_exportacion.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_cartera_exp, columns: ["NitoCC"] } 
+    extract_fecha_operacion: False       
+
+  - name: "Presupuesto Ventas"
+    path: "Compañia 1/8. Archivos de Configuracion/02. Presupuestos/01. Presupuesto Ventas"
+    table: "safetti.presupuesto_ventas"
+    sheet_name: 0
+    skiprows: 0
+    allowed_exts: ["xlsx"]
+    replace_mode: "truncate"
+    batch_rows: 100000
+    drop_columns: []
+    ddl_file: "ddl/presupuesto_ventas.sql"   # <- archivo SQL con DDL para crear la tabla (opcional)
+    indexes:
+      - { name: ix_presupuesto_ventas, columns: ["Vendedor-punto"] } 
+    extract_fecha_operacion: false       
+>>>>>>> f116724 (init: estructura Safetti ETL)

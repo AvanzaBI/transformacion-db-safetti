@@ -2,6 +2,10 @@ CREATE TABLE IF NOT EXISTS insumos_bodegas_sin_integrar (
     Cod VARCHAR(20),
     Generico VARCHAR(50),
     Especifico VARCHAR(50),
+<<<<<<< HEAD
+=======
+    Color VARCHAR(50),
+>>>>>>> f116724 (init: estructura Safetti ETL)
     `Talla/Med` VARCHAR(10),
     Cant INT,
     Precio DECIMAL(10,2),

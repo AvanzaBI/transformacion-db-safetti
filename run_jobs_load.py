@@ -4,14 +4,25 @@ import argparse
 import yaml
 import pandas as pd
 from dotenv import load_dotenv
+<<<<<<< HEAD
 
 from storage import get_filesystem, get_root, iter_xlsx, read_file_bytes
 from excel_reader import read_excel_bytes
+=======
+from cleaners import coerce_decimal_column
+
+from storage import get_filesystem, get_root, iter_xlsx, read_file_bytes
+from excel_reader import read_excel_bytes, iter_excel_chunks
+>>>>>>> f116724 (init: estructura Safetti ETL)
 from transform import add_fecha_operacion
 from mysql_loader import load_batch_to_mysql
 from ddl_utils import ensure_table_from_file, truncate_table, ensure_index_exists
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f116724 (init: estructura Safetti ETL)
 def process_job(fs, base_prefix: str, job: dict, defaults: dict):
     name        = job["name"]
     subpath     = job["path"]
@@ -25,6 +36,16 @@ def process_job(fs, base_prefix: str, job: dict, defaults: dict):
     drop_cols   = list(job.get("drop_columns", []))
     select_cols = job.get("select_columns")  # opcional: orden exacto de columnas
 
+<<<<<<< HEAD
+=======
+    # Flags de control adicionales
+    extract_fecha = job.get("extract_fecha_operacion", True)
+    stream_excel  = bool(job.get("stream_excel", False))
+    chunk_rows    = int(job.get("chunk_rows", batch_rows))  # por defecto usa tamaño de lote
+    use_ldli      = bool(job.get("use_load_data_infile", False))
+    create_idx_end = bool(job.get("create_indexes_at_end", False))
+
+>>>>>>> f116724 (init: estructura Safetti ETL)
     root = get_root(base_prefix, subpath)
     print(f"\n==> Job: {name}")
     print(f"    Path:  {fs.file_system_name}/{root}")
@@ -34,12 +55,17 @@ def process_job(fs, base_prefix: str, job: dict, defaults: dict):
     print(f"    Drop:  {drop_cols or '(ninguna)'}")
     if select_cols:
         print(f"    Orden forzado (select_columns): {select_cols}")
+<<<<<<< HEAD
+=======
+    print(f"    Stream Excel: {stream_excel} | chunk_rows={chunk_rows} | extract_fecha={extract_fecha} | LDLI={use_ldli} | idx_end={create_idx_end}")
+>>>>>>> f116724 (init: estructura Safetti ETL)
 
     # 1) Asegurar tabla y política de reemplazo
     if ddl_file:
         ensure_table_from_file(ddl_file)
     if replace == "truncate":
         truncate_table(table)
+<<<<<<< HEAD
     # crear índices declarados en el job (idempotentes)
     for idx in job.get("indexes", []):
         ensure_index_exists(
@@ -48,12 +74,29 @@ def process_job(fs, base_prefix: str, job: dict, defaults: dict):
             columns=idx["columns"],
             unique=idx.get("unique", False)
     )
+=======
+
+    # Índices al inicio SOLO si no se pidió moverlos al final
+    if not create_idx_end:
+        for idx in job.get("indexes", []):
+            ensure_index_exists(
+                table=table,
+                index_name=idx["name"],
+                columns=idx["columns"],
+                unique=idx.get("unique", False)
+            )
+
+>>>>>>> f116724 (init: estructura Safetti ETL)
     # 2) Validación ruta
     if not fs.get_directory_client(root).exists():
         print("    ⚠ La ruta no existe. Se omite.")
         return
 
+<<<<<<< HEAD
     # 3) Stream por lotes
+=======
+    # 3) Stream por lotes (buffer en memoria)
+>>>>>>> f116724 (init: estructura Safetti ETL)
     buffer, buffered_rows = [], 0
     found = processed = errs = inserted_total = 0
     column_list_for_loader = select_cols  # se usa si definiste select_columns
@@ -67,6 +110,7 @@ def process_job(fs, base_prefix: str, job: dict, defaults: dict):
         found += 1
         try:
             xls = read_file_bytes(fs, path)
+<<<<<<< HEAD
             df  = read_excel_bytes(xls, sheet_name=sheet_name, skiprows=skiprows)
             df  = add_fecha_operacion(df, path)
 
@@ -93,11 +137,100 @@ def process_job(fs, base_prefix: str, job: dict, defaults: dict):
                 inserted_total += inserted
                 print(f"    ✔ Lote cargado: {inserted} filas (archivos acumulados: {processed})")
                 buffer.clear(); buffered_rows = 0
+=======
+
+            if stream_excel:
+                # === Lectura por chunks (openpyxl read_only) ===
+                for df in iter_excel_chunks(
+                    xls_bytes=xls,
+                    sheet_name=sheet_name,
+                    skiprows=skiprows,
+                    chunk_rows=chunk_rows
+                ):
+                    # Añadir fecha si el job lo requiere
+                    if extract_fecha:
+                        try:
+                            df = add_fecha_operacion(df, path)
+                        except Exception:
+                            # Si el job EXIGE (True por defecto) y falla, propaga
+                            if job.get("extract_fecha_operacion", True):
+                                raise
+                            # Si no lo exige, ignora y continúa
+
+                    # Drops por job (si existen)
+                    if drop_cols:
+                        present = [c for c in drop_cols if c in df.columns]
+                        if present:
+                            df = df.drop(columns=present)
+
+                    # Orden/selección exacta (si defines select_columns)
+                    if select_cols:
+                        missing = [c for c in select_cols if c not in df.columns]
+                        if missing:
+                            raise ValueError(f"Faltan columnas requeridas {missing} en {basefile}")
+                        df = df[select_cols]
+
+                    buffer.append(df)
+                    buffered_rows += len(df)
+                    processed += 1
+
+                    # Descargar buffer a MySQL cuando alcance el lote
+                    if buffered_rows >= batch_rows:
+                        df_batch = pd.concat(buffer, ignore_index=True, sort=False)
+                        inserted = load_batch_to_mysql(
+                            df_batch,
+                            table,
+                            column_list=column_list_for_loader,
+                            use_load_data_infile=use_ldli
+                        )
+                        inserted_total += inserted
+                        print(f"    ✔ Lote cargado: {inserted} filas (archivos acumulados: {processed})")
+                        buffer.clear(); buffered_rows = 0
+
+            else:
+                # === Camino original (leer el archivo completo a memoria) ===
+                df = read_excel_bytes(xls, sheet_name=sheet_name, skiprows=skiprows)
+
+                if extract_fecha:
+                    try:
+                        df = add_fecha_operacion(df, path)
+                    except Exception:
+                        if job.get("extract_fecha_operacion", True):
+                            raise
+
+                if drop_cols:
+                    present = [c for c in drop_cols if c in df.columns]
+                    if present:
+                        df = df.drop(columns=present)
+
+                if select_cols:
+                    missing = [c for c in select_cols if c not in df.columns]
+                    if missing:
+                        raise ValueError(f"Faltan columnas requeridas {missing} en {basefile}")
+                    df = df[select_cols]
+
+                buffer.append(df)
+                buffered_rows += len(df)
+                processed += 1
+
+                if buffered_rows >= batch_rows:
+                    df_batch = pd.concat(buffer, ignore_index=True, sort=False)
+                    inserted = load_batch_to_mysql(
+                        df_batch,
+                        table,
+                        column_list=column_list_for_loader,
+                        use_load_data_infile=use_ldli
+                    )
+                    inserted_total += inserted
+                    print(f"    ✔ Lote cargado: {inserted} filas (archivos acumulados: {processed})")
+                    buffer.clear(); buffered_rows = 0
+>>>>>>> f116724 (init: estructura Safetti ETL)
 
         except Exception as e:
             errs += 1
             print(f"    ⚠ Error en '{path}': {e}")
 
+<<<<<<< HEAD
     # último lote
     if buffer:
         df_batch = pd.concat(buffer, ignore_index=True, sort=False)
@@ -107,6 +240,33 @@ def process_job(fs, base_prefix: str, job: dict, defaults: dict):
 
     print(f"    Resumen: encontrados={found}  procesados={processed}  errores={errs}  insertadas={inserted_total}")
 
+=======
+    # Último lote pendiente
+    if buffer:
+        df_batch = pd.concat(buffer, ignore_index=True, sort=False)
+        inserted = load_batch_to_mysql(
+            df_batch,
+            table,
+            column_list=column_list_for_loader,
+            use_load_data_infile=use_ldli
+        )
+        inserted_total += inserted
+        print(f"    ✔ Lote final: {inserted} filas")
+
+    # Crear índices al final si se solicitó
+    if create_idx_end:
+        for idx in job.get("indexes", []):
+            ensure_index_exists(
+                table=table,
+                index_name=idx["name"],
+                columns=idx["columns"],
+                unique=idx.get("unique", False)
+            )
+
+    print(f"    Resumen: encontrados={found}  procesados={processed}  errores={errs}  insertadas={inserted_total}")
+
+
+>>>>>>> f116724 (init: estructura Safetti ETL)
 def main():
     load_dotenv()
 

@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS notas_contables_gerencia (
     CODIGOCTA VARCHAR(20),
     DCTO INT,
     FECHAMVTO DATE,
+<<<<<<< HEAD
     NIT INT,
     CHEQUE VARCHAR(20),
     DEBITO DECIMAL(10,5),
@@ -14,6 +15,20 @@ CREATE TABLE IF NOT EXISTS notas_contables_gerencia (
     CODCONCILIA INT,
     TRM DECIMAL(10,5),
     VRDOLAR DECIMAL(10,5),
+=======
+    NIT VARCHAR(30),
+    CHEQUE VARCHAR(20),
+    DEBITO DECIMAL(15,5),
+    CREDITO DECIMAL(15,5),
+    DETALLE VARCHAR(100),
+    CODCOMPROB INT,
+    BASE DECIMAL(15,5),
+    CODCC INT,
+    FECHAVCMTO DATE,
+    CODCONCILI VARCHAR(30),
+    TRM DECIMAL(15,5),
+    VRDOLAR DECIMAL(15,5),
+>>>>>>> f116724 (init: estructura Safetti ETL)
     CIUDAD VARCHAR(50),
     fecha_operacion DATE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

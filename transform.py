@@ -9,4 +9,10 @@ def add_fecha_operacion(df: pd.DataFrame, src_path: str) -> pd.DataFrame:
     fecha = extract_date_from_filename(src_path)
     df["fecha_operacion"] = fecha
     df["fecha_operacion"] = pd.to_datetime(df["fecha_operacion"], errors="coerce", dayfirst=True).dt.date
+<<<<<<< HEAD
+=======
+    print(f"[DEBUG fecha_operacion] {src_path} -> {fecha}")
+    if fecha is None:
+        raise ValueError(f"No se pudo extraer fecha de: {src_path}")
+>>>>>>> f116724 (init: estructura Safetti ETL)
     return df

@@ -1,3 +1,35 @@
+<<<<<<< HEAD
 venv/
 __pycache__/
 *.pyc
+=======
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+.env
+.env.*
+
+# VSCode / PyCharm
+.vscode/
+.idea/
+
+# Datos y salidas
+data/
+raw/
+tmp/
+logs/
+*.log
+*.csv
+*.xlsx
+*.parquet
+*.bak
+
+# OS
+.DS_Store
+Thumbs.db
+>>>>>>> f116724 (init: estructura Safetti ETL)

@@ -1,10 +1,50 @@
 # excel_reader.py
 import io
+<<<<<<< HEAD
 import pandas as pd
+=======
+from io import BytesIO
+import pandas as pd
+from openpyxl import load_workbook
+>>>>>>> f116724 (init: estructura Safetti ETL)
 
 class ExcelReadError(RuntimeError):
     pass
 
+<<<<<<< HEAD
+=======
+def iter_excel_chunks(xls_bytes: bytes, sheet_name=0, skiprows=0, chunk_rows=50000):
+    """
+    Lee un .xlsx en modo streaming y rinde DataFrames de tamaño <= chunk_rows.
+    Asume que la primera fila útil tras skiprows es el header.
+    """
+    wb = load_workbook(filename=BytesIO(xls_bytes), read_only=True, data_only=True)
+    ws = wb.worksheets[sheet_name] if isinstance(sheet_name, int) else wb[sheet_name]
+
+    rows_iter = ws.iter_rows(values_only=True)
+    # descarta filas previas
+    for _ in range(skiprows):
+        next(rows_iter, None)
+
+    # header
+    header = next(rows_iter, None)
+    if header is None:
+        wb.close()
+        return  # hoja vacía
+
+    buffer = []
+    for row in rows_iter:
+        buffer.append(row)
+        if len(buffer) >= chunk_rows:
+            yield pd.DataFrame(buffer, columns=header)
+            buffer.clear()
+
+    if buffer:
+        yield pd.DataFrame(buffer, columns=header)
+
+    wb.close()
+
+>>>>>>> f116724 (init: estructura Safetti ETL)
 def read_excel_bytes(
     xls_bytes: bytes,
     *,

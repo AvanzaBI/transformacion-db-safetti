@@ -33,6 +33,7 @@ def _conn():
     )
 
 def ensure_table_from_file(ddl_file: str):
+<<<<<<< HEAD
     """Ejecuta el contenido de un archivo .sql (CREATE TABLE IF NOT EXISTS ...)."""
     if not os.path.isfile(ddl_file):
         raise FileNotFoundError(f"DDL no encontrado: {ddl_file}")
@@ -41,12 +42,48 @@ def ensure_table_from_file(ddl_file: str):
     statements = [s.strip() for s in sql_text.split(";") if s.strip()]
     if not statements:
         raise ValueError(f"Archivo DDL vacío: {ddl_file}")
+=======
+    """
+    Reemplaza la tabla con el DDL indicado.
+    - Lee el archivo .sql (debe contener un CREATE TABLE completo).
+    - Ejecuta DROP TABLE IF EXISTS <nombre_tabla>.
+    - Ejecuta el CREATE TABLE.
+    """
+    ddl_path = os.path.abspath(ddl_file)
+    if not os.path.exists(ddl_path):
+        raise FileNotFoundError(f"Archivo DDL no encontrado: {ddl_path}")
+
+    with open(ddl_path, "r", encoding="utf-8") as f:
+        ddl_sql = f.read().strip()
+
+    # Extraer el nombre de la tabla del CREATE (simple parseo)
+    import re
+    ddl_clean = " ".join(ddl_sql.split()).lower()
+
+# Busca el patrón CREATE TABLE [IF NOT EXISTS] nombre
+    m = re.search(
+        r'create\s+table\s+(if\s+not\s+exists\s+)?`?([a-z0-9_.]+)`?',
+        ddl_clean,
+        re.IGNORECASE,
+    )
+    if not m:
+        raise ValueError("No se pudo extraer el nombre de la tabla del DDL")
+    
+    table_name = m.group(2)
+>>>>>>> f116724 (init: estructura Safetti ETL)
 
     conn = _conn()
     try:
         with conn.cursor() as cur:
+<<<<<<< HEAD
             for stmt in statements:
                 cur.execute(stmt)
+=======
+            print(f"[DDL] Dropping and creating table {table_name} from {ddl_file}")
+            cur.execute(f"DROP TABLE IF EXISTS {table_name}")
+            cur.execute(ddl_sql)
+        conn.commit()
+>>>>>>> f116724 (init: estructura Safetti ETL)
     finally:
         conn.close()
 
