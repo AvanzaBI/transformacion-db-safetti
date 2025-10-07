@@ -1,7 +1,4 @@
 CREATE TABLE IF NOT EXISTS cartera_nacional (
-<<<<<<< HEAD
-    NitoCC INT,
-=======
     NitoCC VARCHAR(50),
 >>>>>>> f116724 (init: estructura Safetti ETL)
     NOMBRE VARCHAR(100),

@@ -1,18 +1,17 @@
 # excel_reader.py
 import io
-<<<<<<< HEAD
+
 import pandas as pd
-=======
+
 from io import BytesIO
 import pandas as pd
 from openpyxl import load_workbook
->>>>>>> f116724 (init: estructura Safetti ETL)
+
 
 class ExcelReadError(RuntimeError):
     pass
 
-<<<<<<< HEAD
-=======
+
 def iter_excel_chunks(xls_bytes: bytes, sheet_name=0, skiprows=0, chunk_rows=50000):
     """
     Lee un .xlsx en modo streaming y rinde DataFrames de tamaño <= chunk_rows.
@@ -44,7 +43,7 @@ def iter_excel_chunks(xls_bytes: bytes, sheet_name=0, skiprows=0, chunk_rows=500
 
     wb.close()
 
->>>>>>> f116724 (init: estructura Safetti ETL)
+
 def read_excel_bytes(
     xls_bytes: bytes,
     *,

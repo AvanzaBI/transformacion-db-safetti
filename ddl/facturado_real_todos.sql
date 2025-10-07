@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS facturado_real_todos (
-<<<<<<< HEAD
-    Nfact INT,
+    Nfact VARCHAR(30),
     DEV INT,
     Tipo VARCHAR(30),
     `Fecha Fact` DATE,
@@ -42,7 +41,6 @@ CREATE TABLE IF NOT EXISTS facturado_real_todos (
     Zona VARCHAR(50),
     CodPais VARCHAR(10),
     nompais VARCHAR(50),
-=======
     `Fecha Fact` DATE,
     Numped VARCHAR(30),
     OrdComp VARCHAR(30),
@@ -101,6 +99,5 @@ CREATE TABLE IF NOT EXISTS facturado_real_todos (
     RefEquivalente VARCHAR(30),
     Codpais VARCHAR(10),
     nompais VARCHAR(30),
->>>>>>> f116724 (init: estructura Safetti ETL)
     fecha_operacion DATE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
